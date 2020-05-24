@@ -1,5 +1,5 @@
 variable app_name {
 }
 
-variable target_port {
+variable image_url {
 }

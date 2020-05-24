@@ -6,13 +6,15 @@ resource "random_string" "random" {
 resource "random_password" "password" {
   length           = 16
   special          = true
-  override_special = "_%@"
+  override_special = "_"
 }
 
 resource "google_container_cluster" "primary" {
-  name     = var.name
-  location = var.region
-  network  = var.network
+  provider   = google-beta
+  name       = "ask-and-attest"
+  location   = var.region
+  network    = "projects/${var.project_id}/global/networks/default"
+  subnetwork = "default"
 
   master_auth {
     username = random_string.random.result
@@ -23,14 +25,21 @@ resource "google_container_cluster" "primary" {
     }
   }
 
+  ip_allocation_policy {
+    cluster_ipv4_cidr_block  = ""
+    services_ipv4_cidr_block = ""
+  }
+
+  enable_intranode_visibility = false
+
   remove_default_node_pool = true
   initial_node_count       = 1
 }
 
-resource "google_container_node_pool" "primary_preemptible_nodes" {
+resource "google_container_node_pool" "primary" {
   location   = var.region
   cluster    = google_container_cluster.primary.name
-  node_count = 1
+  node_count = 2
 
   node_config {
     preemptible  = true
@@ -47,6 +56,6 @@ resource "google_container_node_pool" "primary_preemptible_nodes" {
       "https://www.googleapis.com/auth/cloud-platform"
     ]
 
-    tags = [var.name]
+    tags = ["ask-and-attest"]
   }
 }

@@ -11,7 +11,7 @@ variable zone {
 }
 
 variable project_id {
-  default = "neon-law-development"
+  default = "ask-and-attest-staging"
 }
 
 variable environment {

@@ -1,5 +1,5 @@
 resource "google_sql_database_instance" "postgres" {
-  name             = var.name
+  name             = var.database_name
   region           = var.region
   database_version = var.postgres_version
 
@@ -8,7 +8,7 @@ resource "google_sql_database_instance" "postgres" {
     ip_configuration {
       ipv4_enabled    = false
       require_ssl     = false
-      private_network = var.network
+      private_network = "projects/${var.project_id}/global/networks/default"
     }
   }
 }

@@ -11,8 +11,5 @@ variable region {
 variable project_id {
 }
 
-variable network {
-}
-
-variable name {
+variable database_name {
 }
